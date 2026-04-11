@@ -104,7 +104,17 @@
       /* Snaps visible instantly, then subtle scale 0.96 → 1 */
       visibility: visible;
       transform: scale(1);
+    } .card-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--r-card);
+      z-index: 0;
     }
+
+    .card-label { position: relative; z-index: 1; }
 
     .card-lock {
       position: absolute;
@@ -353,14 +363,18 @@
       <span class="card-label">Artois Probability</span>
     </div>
 
-    <div class="card half" data-project="Spil"
-         style="background-image: url('images/spil.jpg'); background-size: cover; background-position: center;">
-      <span class="card-label">Spil</span>
-    </div>
-    <div class="card half" data-project="Learning by helping"
-         style="background-image: url('images/learning.jpg'); background-size: cover; background-position: center;">
-      <span class="card-label">Learning by helping</span>
-    </div>
+<div class="card half" data-project="Spil">
+  <video class="card-video" autoplay loop muted playsinline>
+    <source src="images/spil.mp4" type="video/mp4">
+  </video>
+  <span class="card-label">Spil</span>
+</div>
+   <div class="card half" data-project="Learning by helping">
+  <video class="card-video" autoplay loop muted playsinline>
+    <source src="images/learning.mp4" type="video/mp4">
+  </video>
+  <span class="card-label">Learning by helping</span>
+</div>
 
     <div class="card full" data-project="Special Project" data-locked="true"
          style="background-image: url('images/special.jpg'); background-size: cover; background-position: center;">
