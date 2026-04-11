@@ -406,25 +406,25 @@
   <!-- ═══════════════════ GRID ═══════════════════ -->
   <main class="grid">
 
-    <div class="card full" data-project="Bombas">
+    <div class="card full" data-project="Bombas" data-page="bombas.html" style="cursor:pointer;">
       <div class="card-bg" style="background-image: url('images/bombas.jpg');"></div>
       <span class="card-label">Bombas</span>
     </div>
 
-    <div class="card wide" data-project="Spil">
+    <div class="card wide" data-project="Spil" data-page="spil.html" style="cursor:pointer;">
       <video class="card-video" autoplay loop muted playsinline>
         <source src="images/spil.mp4" type="video/mp4">
       </video>
       <span class="card-label">Spil</span>
     </div>
-    <div class="card narrow" data-project="Learning by helping">
+    <div class="card narrow" data-project="Learning by helping" data-page="learning.html" style="cursor:pointer;">
       <video class="card-video" autoplay loop muted playsinline>
         <source src="images/learning.mp4" type="video/mp4">
       </video>
       <span class="card-label">Learning by helping</span>
     </div>
 
-    <div class="card full" data-project="Artois Probability">
+    <div class="card full" data-project="Artois Probability" data-page="artois.html" style="cursor:pointer;">
       <div class="card-bg" style="background-image: url('images/artois.jpg');"></div>
       <span class="card-label">Artois Probability</span>
     </div>
@@ -439,16 +439,16 @@
       </svg>
     </div>
 
-    <div class="card narrow" data-project="Sudor">
+    <div class="card narrow" data-project="Sudor" data-page="sudor.html" style="cursor:pointer;">
       <div class="card-bg" style="background-image: url('images/sudor.jpg');"></div>
       <span class="card-label">Sudor</span>
     </div>
-    <div class="card wide" data-project="Elppa">
+    <div class="card wide" data-project="Elppa" data-page="elppa.html" style="cursor:pointer;">
       <div class="card-bg" style="background-image: url('images/elppa.jpg');"></div>
       <span class="card-label">Elppa</span>
     </div>
 
-    <div class="card full" data-project="La Industria">
+    <div class="card full" data-project="La Industria" data-page="laindustria.html" style="cursor:pointer;">
       <div class="card-bg" style="background-image: url('images/laindustria.jpg');"></div>
       <span class="card-label">La Industria</span>
     </div>
@@ -720,7 +720,8 @@
     // ── Project cards ──────────────────────────────────────
     document.querySelectorAll('.card').forEach(card => {
       card.addEventListener('click', () => {
-        if (card.dataset.locked === 'true') openPw();
+        if (card.dataset.locked === 'true') { openPw(); return; }
+        if (card.dataset.page) window.location.href = card.dataset.page;
       });
     });
 
