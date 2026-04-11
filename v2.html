@@ -35,9 +35,9 @@
       --bg:        #ffffff;
       --card:      #1e1e1e;
       --dark:      #1e1e1e;
-      --pill-bg:   #1e1e1e;
-      --pill-text: #e8e8e8;
-      --bio-text:  #e8e8e8;   /* light text — bio panel is dark */
+      --pill-bg:   #f4f4f4;
+      --pill-text: #1e1e1e;
+      --bio-text:  #1e1e1e;
       --font:      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 
       /* All sizes = previous × 0.85 */
@@ -64,7 +64,7 @@
     ═══════════════════════════════════════════ */
     .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: var(--gap);
       margin-bottom: 0;
     }
@@ -80,8 +80,10 @@
       padding: 18px 20px;
     }
 
-    .card.full { grid-column: 1 / -1; }
-    .card.half { grid-column: span 1; }
+    .card.full  { grid-column: 1 / -1; }
+    .card.half  { grid-column: span 1; }
+    .card.wide  { grid-column: span 2; }
+    .card.narrow { grid-column: span 1; }
 
     /* Label pill — hidden until hover, same size as bottom pills */
     .card-label {
@@ -157,7 +159,7 @@
       transition: background 0.2s ease;
     }
 
-    .pill:hover { background: #2a2a2a; }
+    .pill:hover { background: #e8e8e8; }
 
     /* Ghost — invisible, holds flex space so Let's talk! can centre */
     #ghost {
@@ -229,7 +231,7 @@
       right: 28px;
       background: none;
       border: none;
-      color: rgba(232,232,232,0.4);
+      color: rgba(30,30,30,0.3);
       font-size: 24px;
       font-weight: 300;
       line-height: 1;
@@ -238,7 +240,7 @@
       font-family: sans-serif;
       transition: color 0.2s;
     }
-    .bio-close:hover { color: #e8e8e8; }
+    .bio-close:hover { color: var(--dark); }
 
     .bio-heading {
       font-family: 'SF Pro Condensed', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
@@ -338,7 +340,7 @@
       white-space: nowrap;
       transition: background 0.2s ease;
     }
-    .footer-pill:hover { background: #2a2a2a; }
+    .footer-pill:hover { background: #e8e8e8; }
 
     /* ═══════════════════════════════════════════
        RESPONSIVE
@@ -366,13 +368,13 @@
       <span class="card-label">Artois Probability</span>
     </div>
 
-    <div class="card half" data-project="Spil">
+    <div class="card wide" data-project="Spil">
       <video class="card-video" autoplay loop muted playsinline>
         <source src="images/spil.mp4" type="video/mp4">
       </video>
       <span class="card-label">Spil</span>
     </div>
-    <div class="card half" data-project="Learning by helping">
+    <div class="card narrow" data-project="Learning by helping">
       <video class="card-video" autoplay loop muted playsinline>
         <source src="images/learning.mp4" type="video/mp4">
       </video>
@@ -394,11 +396,11 @@
       <span class="card-label">La Industria</span>
     </div>
 
-    <div class="card half" data-project="Elppa"
+    <div class="card narrow" data-project="Elppa"
          style="background-image: url('images/elppa.jpg'); background-size: cover; background-position: center;">
       <span class="card-label">Elppa</span>
     </div>
-    <div class="card half" data-project="Sudor"
+    <div class="card wide" data-project="Sudor"
          style="background-image: url('images/sudor.jpg'); background-size: cover; background-position: center;">
       <span class="card-label">Sudor</span>
     </div>
@@ -462,7 +464,7 @@
 
     const EASE    = 'cubic-bezier(0.4, 0, 0.2, 1)';
     const DUR     = '0.55s';
-    const PILL_BG = '#1e1e1e';  // panel stays this color in both pill and bio states
+    const PILL_BG = '#f4f4f4';  // panel stays this color in both pill and bio states
 
     const panel      = document.getElementById('panel');
     const ghost      = document.getElementById('ghost');
