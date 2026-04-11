@@ -190,14 +190,14 @@
     #ghost {
       visibility: hidden;
       pointer-events: none;
-      max-width: 400px;
+      overflow: hidden;
       transition:
-        max-width 0.65s cubic-bezier(0.65, 0, 0.35, 1),
-        padding   0.65s cubic-bezier(0.65, 0, 0.35, 1);
+        width   0.65s cubic-bezier(0.65, 0, 0.35, 1),
+        padding 0.65s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     #ghost.morphing {
-      max-width: 0;
+      width: 0 !important;  /* !important overrides inline style set by JS */
       padding-left: 0;
       padding-right: 0;
     }
@@ -599,10 +599,10 @@
       panel.style.borderRadius    = '10px';
       panel.style.backgroundColor = PILL_BG;
 
-      // Pin ghost to its actual rendered width so transition starts immediately
-      ghost.style.maxWidth = ghost.getBoundingClientRect().width + 'px';
+      // Pin ghost to its actual rendered width so transition starts from frame 1
+      ghost.style.width = ghost.getBoundingClientRect().width + 'px';
       ghost.getBoundingClientRect(); // force reflow
-      // Collapse ghost → Let's talk! centres
+      // Collapse ghost → Let's talk! centres (.morphing uses !important to override inline)
       ghost.classList.add('morphing');
 
       panel.getBoundingClientRect(); // force reflow
@@ -682,7 +682,7 @@
           panel.style.transition    = 'none';
           panel.style.pointerEvents = 'all';
           panel.style.cursor        = 'pointer';
-          ghost.style.maxWidth      = '';
+          ghost.style.width         = '';
         }, 570);
 
       }, 150);
