@@ -164,7 +164,7 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: var(--gap);
+      gap: 0;
       z-index: 50;
       align-items: center;
     }
@@ -191,15 +191,18 @@
       visibility: hidden;
       pointer-events: none;
       overflow: hidden;
+      margin-right: var(--gap);
       transition:
-        width   0.65s cubic-bezier(0.65, 0, 0.35, 1),
-        padding 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+        width        0.65s cubic-bezier(0.65, 0, 0.35, 1),
+        padding      0.65s cubic-bezier(0.65, 0, 0.35, 1),
+        margin-right 0.65s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     #ghost.morphing {
       width: 0 !important;  /* !important overrides inline style set by JS */
       padding-left: 0;
       padding-right: 0;
+      margin-right: 0;
     }
 
     /* ═══════════════════════════════════════════
@@ -462,7 +465,7 @@
   <div class="bottom-bar">
     <div class="pill" id="ghost" aria-hidden="true">About me</div>
     <button class="pill" id="talk-btn" onclick="sendEmail()">Let's talk!</button>
-    <button class="pill" id="theme-btn" onclick="toggleTheme()" style="padding: 8px 10px; line-height:0;">
+    <button class="pill" id="theme-btn" onclick="toggleTheme()" style="padding: 8px 10px; line-height:0; margin-left: var(--gap);">
       <svg id="theme-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       <svg id="theme-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
@@ -635,18 +638,12 @@
         bioContent.classList.add('visible');
         panel.style.pointerEvents = 'all';
       }, 500);
-
-      // After ghost fully collapses, hide it so gap disappears → perfect centering
-      setTimeout(() => { if (isOpen) ghost.style.display = 'none'; }, 700);
     }
 
     // ── Close ──────────────────────────────────────────────
     function closeBio() {
       if (!isOpen) return;
       isOpen = false;
-
-      // Restore ghost before it expands back
-      ghost.style.display = '';
 
       panel.style.pointerEvents = 'none';
       bioContent.classList.remove('visible');
