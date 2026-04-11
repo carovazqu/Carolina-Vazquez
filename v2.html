@@ -46,7 +46,7 @@
       --body-size: 22px;   /* was 30px */
       --body-lead: 26px;   /* was 35px */
 
-      --r-card: 18px;
+      --r-card: 12px;
       --r-pill: 10px;      /* rounded rectangle, not full pill */
       --gap:    8px;
     }
@@ -128,9 +128,7 @@
       transform: scale(1.08);
     }
 
-    .card:hover .card-bg          { transform: scale(1.04); }
     .card:hover .card-bg--blur    { transform: scale(1.12); }
-    .card:hover .card-video       { transform: scale(1.04); }
 
     /* Video background inside card */
     .card-video {
@@ -418,11 +416,6 @@
       </svg>
     </div>
 
-    <div class="card full" data-project="La Industria">
-      <div class="card-bg" style="background-image: url('images/laindustria.jpg');"></div>
-      <span class="card-label">La Industria</span>
-    </div>
-
     <div class="card narrow" data-project="Sudor">
       <div class="card-bg" style="background-image: url('images/sudor.jpg');"></div>
       <span class="card-label">Sudor</span>
@@ -430,6 +423,11 @@
     <div class="card wide" data-project="Elppa">
       <div class="card-bg" style="background-image: url('images/elppa.jpg');"></div>
       <span class="card-label">Elppa</span>
+    </div>
+
+    <div class="card full" data-project="La Industria">
+      <div class="card-bg" style="background-image: url('images/laindustria.jpg');"></div>
+      <span class="card-label">La Industria</span>
     </div>
 
   </main>
