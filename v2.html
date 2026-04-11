@@ -635,12 +635,18 @@
         bioContent.classList.add('visible');
         panel.style.pointerEvents = 'all';
       }, 500);
+
+      // After ghost fully collapses, hide it so gap disappears → perfect centering
+      setTimeout(() => { if (isOpen) ghost.style.display = 'none'; }, 700);
     }
 
     // ── Close ──────────────────────────────────────────────
     function closeBio() {
       if (!isOpen) return;
       isOpen = false;
+
+      // Restore ghost before it expands back
+      ghost.style.display = '';
 
       panel.style.pointerEvents = 'none';
       bioContent.classList.remove('visible');
