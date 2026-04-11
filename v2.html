@@ -194,8 +194,8 @@
       pointer-events: none;
       max-width: 400px;
       transition:
-        max-width 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-        padding   0.75s cubic-bezier(0.4, 0, 0.2, 1);
+        max-width 0.65s cubic-bezier(0.65, 0, 0.35, 1),
+        padding   0.65s cubic-bezier(0.65, 0, 0.35, 1);
     }
 
     #ghost.morphing {
@@ -489,7 +489,7 @@
     let isOpen   = false;
     let pillRect = null;
 
-    const EASE    = 'cubic-bezier(0.4, 0, 0.2, 1)';
+    const EASE    = 'cubic-bezier(0.65, 0, 0.35, 1)';
     const DUR     = '0.55s';
     const PILL_BG = '#f4f4f4';  // panel stays this color in both pill and bio states
 
@@ -653,6 +653,14 @@
 
       }, 150);
     }
+
+    // ── About me pill hover ───────────────────────────────
+    panel.addEventListener('mouseenter', () => {
+      if (!isOpen) panel.style.backgroundColor = '#e8e8e8';
+    });
+    panel.addEventListener('mouseleave', () => {
+      if (!isOpen) panel.style.backgroundColor = PILL_BG;
+    });
 
     // ── Panel click (pill → open) ──────────────────────────
     function onPanelClick(e) {
