@@ -108,6 +108,30 @@
       transform: scale(1);
     }
 
+    /* Card overflow clip for zoom effect */
+    .card { overflow: hidden; }
+
+    /* Background image wrapper — zooms independently on hover */
+    .card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--r-card);
+      z-index: 0;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Special project — blurred from CSS, upload crisp image */
+    .card-bg--blur {
+      filter: blur(18px);
+      transform: scale(1.08);
+    }
+
+    .card:hover .card-bg          { transform: scale(1.04); }
+    .card:hover .card-bg--blur    { transform: scale(1.12); }
+    .card:hover .card-video       { transform: scale(1.04); }
+
     /* Video background inside card */
     .card-video {
       position: absolute;
@@ -117,6 +141,7 @@
       object-fit: cover;
       border-radius: var(--r-card);
       z-index: 0;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     .card-label { position: relative; z-index: 1; }
@@ -128,6 +153,24 @@
       width: 15px;
       height: 15px;
       opacity: 0.25;
+      z-index: 1;
+    }
+
+    /* ═══════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════ */
+    * { cursor: none !important; }
+
+    #cursor {
+      position: fixed;
+      width: 28px;
+      height: 28px;
+      background: rgba(120, 120, 120, 0.3);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.15s ease, height 0.15s ease;
     }
 
     /* ═══════════════════════════════════════════
@@ -358,13 +401,13 @@
   <!-- ═══════════════════ GRID ═══════════════════ -->
   <main class="grid">
 
-    <div class="card full" data-project="Bombas"
-         style="background-image: url('images/bombas.jpg'); background-size: cover; background-position: center;">
+    <div class="card full" data-project="Bombas">
+      <div class="card-bg" style="background-image: url('images/bombas.jpg');"></div>
       <span class="card-label">Bombas</span>
     </div>
 
-    <div class="card full" data-project="Artois Probability"
-         style="background-image: url('images/artois.jpg'); background-size: cover; background-position: center;">
+    <div class="card full" data-project="Artois Probability">
+      <div class="card-bg" style="background-image: url('images/artois.jpg');"></div>
       <span class="card-label">Artois Probability</span>
     </div>
 
@@ -381,8 +424,8 @@
       <span class="card-label" style="background: #1e1e1e; color: #f4f4f4;">Learning by helping</span>
     </div>
 
-    <div class="card full" data-project="Special Project" data-locked="true"
-         style="background-image: url('images/special.jpg'); background-size: cover; background-position: center;">
+    <div class="card full" data-project="Special Project" data-locked="true">
+      <div class="card-bg card-bg--blur" style="background-image: url('images/special.jpg');"></div>
       <span class="card-label">Special Project</span>
       <svg class="card-lock" viewBox="0 0 24 24" fill="none"
            stroke="#e8e8e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -391,17 +434,17 @@
       </svg>
     </div>
 
-    <div class="card full" data-project="La Industria"
-         style="background-image: url('images/laindustria.jpg'); background-size: cover; background-position: center;">
+    <div class="card full" data-project="La Industria">
+      <div class="card-bg" style="background-image: url('images/laindustria.jpg');"></div>
       <span class="card-label">La Industria</span>
     </div>
 
-    <div class="card narrow" data-project="Sudor"
-         style="background-image: url('images/sudor.jpg'); background-size: cover; background-position: center;">
+    <div class="card narrow" data-project="Sudor">
+      <div class="card-bg" style="background-image: url('images/sudor.jpg');"></div>
       <span class="card-label">Sudor</span>
     </div>
-    <div class="card wide" data-project="Elppa"
-         style="background-image: url('images/elppa.jpg'); background-size: cover; background-position: center;">
+    <div class="card wide" data-project="Elppa">
+      <div class="card-bg" style="background-image: url('images/elppa.jpg');"></div>
       <span class="card-label">Elppa</span>
     </div>
 
@@ -457,6 +500,15 @@
 
 
   <script>
+
+    // ── Custom cursor ─────────────────────────────────────
+    const cursor = document.createElement('div');
+    cursor.id = 'cursor';
+    document.body.appendChild(cursor);
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
 
     // ── State ─────────────────────────────────────────────
     let isOpen   = false;
