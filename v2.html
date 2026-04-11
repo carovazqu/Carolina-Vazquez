@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carolina Vázquez</title>
+  <style>
+
+    /* ═══════════════════════════════════════════
+       FONTS — SF Pro system fonts (Apple devices)
+    ═══════════════════════════════════════════ */
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: local('SF Pro Display Regular'), local('SFProDisplay-Regular'), local('.SFNSDisplay');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'SF Pro Condensed';
+      src: local('SF Pro Display Condensed Black'), local('SFProDisplay-CondensedBlack'), local('.SFNSDisplayCondensed-Black');
+      font-weight: 900;
+      font-stretch: condensed;
+    }
+    @font-face {
+      font-family: 'SF Pro Text';
+      src: local('SF Pro Text Regular'), local('SFProText-Regular'), local('.SFNSText');
+      font-weight: 400;
+    }
+
+    /* ═══════════════════════════════════════════
+       RESET & TOKENS
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #ffffff;
+      --card:      #1e1e1e;
+      --dark:      #1e1e1e;
+      --pill-bg:   #e8e8e8;
+      --pill-text: #1e1e1e;
+      --bio-text:  #1e1e1e;   /* dark text — bio panel is light */
+      --font:      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+
+      /* All sizes = previous × 0.85 */
+      --pill-size: 14px;   /* was 17px — shared by all pills */
+      --heading:   60px;   /* was 58px */
+      --body-size: 22px;   /* was 30px */
+      --body-lead: 26px;   /* was 35px */
+
+      --r-card: 18px;
+      --r-pill: 10px;      /* rounded rectangle, not full pill */
+      --gap:    8px;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--font);
+    }
+
+    body { padding: 8px; }
+
+    /* ═══════════════════════════════════════════
+       PROJECT GRID
+    ═══════════════════════════════════════════ */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      margin-bottom: 0;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--r-card);
+      cursor: pointer;
+      position: relative;
+      height: 630px;
+      display: flex;
+      align-items: flex-end;
+      padding: 18px 20px;
+    }
+
+    .card.full { grid-column: 1 / -1; }
+    .card.half { grid-column: span 1; }
+
+    /* Label pill — hidden until hover, same size as bottom pills */
+    .card-label {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      font-family: var(--font);
+      white-space: nowrap;
+      /* Hidden: instant cut via visibility, held at 96% scale */
+      visibility: hidden;
+      transform: scale(0.96);
+      transform-origin: bottom left;
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .card:hover .card-label {
+      /* Snaps visible instantly, then subtle scale 0.96 → 1 */
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    .card-lock {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      width: 15px;
+      height: 15px;
+      opacity: 0.25;
+    }
+
+    /* ═══════════════════════════════════════════
+       BOTTOM BAR
+    ═══════════════════════════════════════════ */
+    .bottom-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0;
+      z-index: 50;
+      align-items: center;
+    }
+
+    .pill {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      font-family: var(--font);
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: background 0.2s ease;
+    }
+
+    .pill:hover { background: #d8d8d8; }
+
+    /* Ghost — invisible, holds flex space so Let's talk! can centre */
+    #ghost {
+      visibility: hidden;
+      pointer-events: none;
+      max-width: 400px;
+      transition:
+        max-width 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+        padding   0.75s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #ghost.morphing {
+      max-width: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       BIO PANEL  (= the Carolina pill)
+       One element. Never swapped. Never hidden.
+    ═══════════════════════════════════════════ */
+    #panel {
+      position: fixed;
+      background: var(--pill-bg);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+      opacity: 0;           /* JS sets 1 after positioning */
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Carolina text inside the pill */
+    #pill-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      font-size: var(--pill-size);
+      font-weight: 400;
+      color: var(--pill-text);
+      white-space: nowrap;
+      pointer-events: none;
+      transform: scale(0);
+    }
+
+    /* No animation — Carolina text cuts in cleanly */
+
+    /* Bio content */
+    #bio-content {
+      position: absolute;
+      inset: 0;
+      padding: 48px 52px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+      overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #bio-content.visible { opacity: 1; }
+
+    .bio-close {
+      position: absolute;
+      top: 22px;
+      right: 28px;
+      background: none;
+      border: none;
+      color: rgba(30,30,30,0.3);
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-family: sans-serif;
+      transition: color 0.2s;
+    }
+    .bio-close:hover { color: var(--dark); }
+
+    .bio-heading {
+      font-family: 'SF Pro Condensed', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--heading);
+      font-weight: 900;
+      font-stretch: condensed;
+      color: var(--bio-text);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      max-width: 900px;
+    }
+
+    .bio-body {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--body-size);
+      line-height: var(--body-lead);
+      font-weight: 400;
+      color: var(--bio-text);
+      max-width: 820px;
+    }
+
+    /* ═══════════════════════════════════════════
+       PASSWORD OVERLAY
+    ═══════════════════════════════════════════ */
+    .pw-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .pw-overlay.open { opacity: 1; pointer-events: all; }
+
+    .dialog {
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    }
+    .dialog h3 { font-size: 18px; font-weight: 600; font-family: var(--font); }
+    .dialog p  { font-size: 14px; color: #666; font-family: var(--font); }
+    .dialog input {
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-family: var(--font);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .dialog input:focus { border-color: var(--dark); }
+    .dialog-btns { display: flex; gap: 8px; justify-content: flex-end; }
+    .btn-ghost {
+      background: none; border: 1.5px solid #e0e0e0; border-radius: 8px;
+      padding: 8px 16px; font-size: 14px; cursor: pointer; font-family: var(--font);
+    }
+    .btn-dark {
+      background: var(--dark); color: #fff; border: none; border-radius: 8px;
+      padding: 8px 16px; font-size: 14px; cursor: pointer; font-family: var(--font);
+    }
+    .error-msg { color: #e44; font-size: 13px; font-family: var(--font); display: none; }
+    .error-msg.show { display: block; }
+
+    /* ═══════════════════════════════════════════
+       FOOTER PILLS (LinkedIn / Behance)
+       In normal flow — align with fixed bar at max scroll.
+       bottom: 24px fixed + body padding 8px → margin-bottom: 16px
+    ═══════════════════════════════════════════ */
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    .footer-pill {
+      background: var(--pill-bg);
+      color: #939393;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      font-family: var(--font);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+    .footer-pill:hover { background: #d8d8d8; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      body { padding: 6px 6px 90px; }
+      :root { --heading: 28px; --body-size: 17px; --body-lead: 24px; }
+      #bio-content { padding: 32px 24px; justify-content: flex-start; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════ GRID ═══════════════════ -->
+  <main class="grid">
+
+    <div class="card full" data-project="Bombas">
+      <span class="card-label">Bombas</span>
+    </div>
+
+    <div class="card full" data-project="Artois Probability">
+      <span class="card-label">Artois Probability</span>
+    </div>
+
+    <div class="card half" data-project="Spil">
+      <span class="card-label">Spil</span>
+    </div>
+    <div class="card half" data-project="Learning by helping">
+      <span class="card-label">Learning by helping</span>
+    </div>
+
+    <div class="card full" data-project="Special Project" data-locked="true">
+      <span class="card-label">Special Project</span>
+      <svg class="card-lock" viewBox="0 0 24 24" fill="none"
+           stroke="#e8e8e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+    </div>
+
+    <div class="card full" data-project="La Industria">
+      <span class="card-label">La Industria</span>
+    </div>
+
+    <div class="card half" data-project="Elppa">
+      <span class="card-label">Elppa</span>
+    </div>
+    <div class="card half" data-project="Sudor">
+      <span class="card-label">Sudor</span>
+    </div>
+
+  </main>
+
+  <!-- ═══════════════════ FOOTER PILLS ═══════════════════ -->
+  <footer class="page-footer">
+    <a href="https://www.linkedin.com/in/carolina-vazquez-904959156/" class="footer-pill" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.behance.net/carovazqu103d0" class="footer-pill" target="_blank" rel="noopener">Behance</a>
+  </footer>
+
+  <!-- ═══════════════════ BOTTOM BAR ═══════════════════ -->
+  <div class="bottom-bar">
+    <div class="pill" id="ghost" aria-hidden="true">Carolina Vázquez</div>
+    <button class="pill" id="talk-btn" onclick="sendEmail()">Let's talk!</button>
+  </div>
+
+
+  <!-- ═══════════════════ BIO PANEL (= the pill) ═══════════════════ -->
+  <div id="panel" onclick="onPanelClick(event)">
+    <div id="pill-text"><span>Carolina Vázquez</span></div>
+    <div id="bio-content">
+      <button class="bio-close" onclick="closeBio()">×</button>
+      <div class="bio-heading">
+        Carolina Vázquez is a<br>
+        designer and art director<br>
+        working at &amp;Walsh
+      </div>
+      <div class="bio-body">
+        Argentinian Designer and Art Director working at &amp;walsh based in Amsterdam.
+        With a focus on developing visual identities and design systems and a background
+        in advertising, which has shaped my approach to creative and strategic thinking.
+        My work has been recognized at international festivals such as Cannes Lions.
+        Currently leading projects and design teams at &amp;walsh.
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════ PASSWORD OVERLAY ═══════════════════ -->
+  <div class="pw-overlay" id="pw-overlay">
+    <div class="dialog">
+      <h3>Special Project</h3>
+      <p>This project is password protected.</p>
+      <input type="password" id="pw-input" placeholder="Enter password" />
+      <span class="error-msg" id="pw-error">Incorrect password. Please try again.</span>
+      <div class="dialog-btns">
+        <button class="btn-ghost" onclick="closePw()">Cancel</button>
+        <button class="btn-dark"  onclick="checkPw()">Enter</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+
+    // ── State ─────────────────────────────────────────────
+    let isOpen   = false;
+    let pillRect = null;
+
+    const EASE    = 'cubic-bezier(0.4, 0, 0.2, 1)';
+    const DUR     = '0.55s';
+    const PILL_BG = '#e8e8e8';  // panel stays this color in both pill and bio states
+
+    const panel      = document.getElementById('panel');
+    const ghost      = document.getElementById('ghost');
+    const bioContent = document.getElementById('bio-content');
+    const pillText   = document.getElementById('pill-text');
+
+    // ── Snap panel to ghost position ───────────────────────
+    function snapToGhost() {
+      const r = ghost.getBoundingClientRect();
+      panel.style.transition      = 'none';
+      panel.style.left            = r.left   + 'px';
+      panel.style.top             = r.top    + 'px';
+      panel.style.width           = r.width  + 'px';
+      panel.style.height          = r.height + 'px';
+      panel.style.borderRadius    = '10px';
+      panel.style.backgroundColor = PILL_BG;
+    }
+
+    // ── Init after fonts load ──────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      document.fonts.ready.then(() => {
+        snapToGhost();
+        panel.style.opacity       = '1';
+        panel.style.pointerEvents = 'all';
+        panel.style.cursor        = 'pointer';
+        pillText.style.transform  = 'scale(1)';
+      });
+    });
+
+    // Helper — calculates open panel dimensions for current window size
+    function calcOpenRect() {
+      const mobile = window.innerWidth <= 768;
+      return {
+        w:      mobile ? window.innerWidth         : Math.min(780, window.innerWidth - 250),
+        h:      mobile ? (window.innerHeight - 70) : Math.min(640, window.innerHeight - 200),
+        left:   mobile ? 0 : null,   // null = centred
+        top:    mobile ? 0 : null,
+        radius: mobile ? '0' : '20px'
+      };
+    }
+
+    window.addEventListener('resize', () => {
+      if (!isOpen) {
+        snapToGhost();
+      } else {
+        // Keep panel correctly sized and centred as window resizes
+        const r = calcOpenRect();
+        const left = r.left !== null ? r.left : (window.innerWidth  - r.w) / 2;
+        const top  = r.top  !== null ? r.top  : (window.innerHeight - r.h) / 2 - 30;
+        panel.style.transition   = 'none';
+        panel.style.left         = left   + 'px';
+        panel.style.top          = top    + 'px';
+        panel.style.width        = r.w    + 'px';
+        panel.style.height       = r.h    + 'px';
+        panel.style.borderRadius = r.radius;
+        // Update pillRect so close animation targets current ghost position
+        pillRect = ghost.getBoundingClientRect();
+      }
+    });
+
+    // ── Open ───────────────────────────────────────────────
+    function openBio() {
+      if (isOpen) return;
+      isOpen = true;
+
+      pillRect = ghost.getBoundingClientRect();
+
+      // Reset pill text
+      pillText.classList.remove('entering');
+      pillText.style.transform = 'scale(0)';
+
+      panel.style.pointerEvents = 'none';
+      panel.style.cursor        = 'default';
+
+      // Snap to ghost (ensure alignment)
+      panel.style.transition      = 'none';
+      panel.style.left            = pillRect.left   + 'px';
+      panel.style.top             = pillRect.top    + 'px';
+      panel.style.width           = pillRect.width  + 'px';
+      panel.style.height          = pillRect.height + 'px';
+      panel.style.borderRadius    = '10px';
+      panel.style.backgroundColor = PILL_BG;
+
+      // Collapse ghost → Let's talk! centres
+      ghost.classList.add('morphing');
+
+      panel.getBoundingClientRect(); // force reflow
+
+      const mobile = window.innerWidth <= 768;
+
+      // Floating card — smaller, centered, doesn't fill the screen
+      const panelW    = mobile ? window.innerWidth         : Math.min(780, window.innerWidth - 250);
+      const panelH    = mobile ? (window.innerHeight - 70) : Math.min(640, window.innerHeight - 200);
+      const panelLeft = mobile ? 0 : (window.innerWidth  - panelW) / 2;
+      const panelTop  = mobile ? 0 : (window.innerHeight - panelH) / 2 - 30;
+      const endRadius = mobile ? '0' : '20px';
+
+      // Morph: pill → floating card
+      panel.style.transition = [
+        `left ${DUR} ${EASE}`,
+        `top ${DUR} ${EASE}`,
+        `width ${DUR} ${EASE}`,
+        `height ${DUR} ${EASE}`,
+        `border-radius ${DUR} ${EASE}`
+      ].join(', ');
+
+      panel.style.left         = panelLeft + 'px';
+      panel.style.top          = panelTop  + 'px';
+      panel.style.width        = panelW    + 'px';
+      panel.style.height       = panelH    + 'px';
+      panel.style.borderRadius = endRadius;
+
+      setTimeout(() => {
+        bioContent.classList.add('visible');
+        panel.style.pointerEvents = 'all';
+      }, 500);
+    }
+
+    // ── Close ──────────────────────────────────────────────
+    function closeBio() {
+      if (!isOpen) return;
+      isOpen = false;
+
+      panel.style.pointerEvents = 'none';
+      bioContent.classList.remove('visible');
+
+      // Let's talk! starts moving back after a short offset (not immediately)
+      setTimeout(() => ghost.classList.remove('morphing'), 200);
+
+      setTimeout(() => {
+
+        // Morph: full panel → pill, dark → light
+        panel.style.transition = [
+          `left ${DUR} ${EASE}`,
+          `top ${DUR} ${EASE}`,
+          `width ${DUR} ${EASE}`,
+          `height ${DUR} ${EASE}`,
+          `border-radius ${DUR} ${EASE}`
+        ].join(', ');
+
+        panel.style.left            = pillRect.left   + 'px';
+        panel.style.top             = pillRect.top    + 'px';
+        panel.style.width           = pillRect.width  + 'px';
+        panel.style.height          = pillRect.height + 'px';
+        panel.style.borderRadius    = '10px';
+        panel.style.backgroundColor = PILL_BG;
+
+        // At 90% of shrink: Carolina text cuts in cleanly
+        setTimeout(() => {
+          pillText.style.transform = 'scale(1)';
+        }, 495);
+
+        // Shrink done: restore interactivity
+        setTimeout(() => {
+          panel.style.transition    = 'none';
+          panel.style.pointerEvents = 'all';
+          panel.style.cursor        = 'pointer';
+        }, 570);
+
+      }, 150);
+    }
+
+    // ── Panel click (pill → open) ──────────────────────────
+    function onPanelClick(e) {
+      if (e.target.closest('.bio-close')) return;
+      if (!isOpen) openBio();
+    }
+
+    // ── Email ──────────────────────────────────────────────
+    function sendEmail() {
+      window.location.href = 'mailto:carovazqu13@gmail.com';
+    }
+
+    // ── Project cards ──────────────────────────────────────
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        if (card.dataset.locked === 'true') openPw();
+      });
+    });
+
+    // ── Password ───────────────────────────────────────────
+    function openPw() {
+      document.getElementById('pw-overlay').classList.add('open');
+      setTimeout(() => document.getElementById('pw-input').focus(), 50);
+    }
+    function closePw() {
+      document.getElementById('pw-overlay').classList.remove('open');
+      document.getElementById('pw-input').value = '';
+      document.getElementById('pw-error').classList.remove('show');
+    }
+    function checkPw() {
+      const val = document.getElementById('pw-input').value.trim().toLowerCase();
+      if (val === 'cookies') { closePw(); }
+      else { document.getElementById('pw-error').classList.add('show'); }
+    }
+
+    document.getElementById('pw-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter')  checkPw();
+      if (e.key === 'Escape') closePw();
+    });
+    document.getElementById('pw-overlay').addEventListener('click', e => {
+      if (e.target === document.getElementById('pw-overlay')) closePw();
+    });
+
+  </script>
+</body>
+</html>
