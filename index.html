@@ -41,9 +41,10 @@
       --font:      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 
       --pill-size: 14px;
-      --heading:   clamp(28px, 5vw, 60px);   /* scales 28px → 60px */
-      --body-size: clamp(16px, 1.8vw, 22px); /* scales 16px → 22px */
-      --body-lead: clamp(22px, 2.2vw, 26px); /* scales 22px → 26px */
+      /* Text scales only when panel starts shrinking (viewport < 1030px) */
+      --heading:   clamp(28px, calc(7.7vw - 19px), 60px);
+      --body-size: clamp(16px, calc(2.8vw - 7px),  22px);
+      --body-lead: clamp(22px, calc(3.3vw - 8px),  26px);
 
       --r-card: 12px;
       --r-pill: 8px;       /* rounded rectangle, not full pill */
@@ -643,8 +644,8 @@
       if (!isOpen) return;
       isOpen = false;
 
-      // Always refresh — ghost may have moved since panel opened (scroll/resize)
-      pillRect = ghost.getBoundingClientRect();
+      // Remove theme-transitioning immediately — its !important would block the morph animation
+      panel.classList.remove('theme-transitioning');
 
       panel.style.pointerEvents = 'none';
       bioContent.classList.remove('visible');
@@ -654,7 +655,7 @@
 
       setTimeout(() => {
 
-        // Morph: full panel → pill, dark → light
+        // Morph: full panel → pill
         panel.style.transition = [
           `left ${DUR} ${EASE}`,
           `top ${DUR} ${EASE}`,
@@ -675,15 +676,19 @@
           pillText.style.transform = 'scale(1)';
         }, 495);
 
-        // Shrink done: restore interactivity + reset ghost max-width
-        setTimeout(() => {
-          panel.style.transition    = 'none';
+      }, 150);
+
+      // Final cleanup — runs after ghost fully expands (200ms delay + 650ms transition)
+      // Snaps panel exactly onto ghost, restores all state cleanly
+      setTimeout(() => {
+        if (!isOpen) {
+          ghost.style.width = '';
+          snapToGhost();
+          pillText.style.transform  = 'scale(1)';
           panel.style.pointerEvents = 'all';
           panel.style.cursor        = 'pointer';
-          ghost.style.width         = '';
-        }, 570);
-
-      }, 150);
+        }
+      }, 900);
     }
 
     // ── About me pill hover ───────────────────────────────
