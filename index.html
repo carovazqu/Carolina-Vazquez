@@ -583,6 +583,12 @@
       if (isOpen) return;
       isOpen = true;
 
+      // Reset ghost to natural state before measuring —
+      // in case a previous close animation is still mid-flight
+      ghost.classList.remove('morphing');
+      ghost.style.width = '';
+      ghost.getBoundingClientRect(); // force reflow
+
       pillRect = ghost.getBoundingClientRect();
 
       // Reset pill text
