@@ -139,9 +139,9 @@
     body.dark-mode .read-more-btn     { background: #000000; color: #e8e8e8; }
     body.dark-mode .read-more-btn:hover { background: #1a1a1a; }
 
-    /* Bombas-specific card heights — 16:9 for full, half that for split */
-    .card.full { height: calc((100vw - 16px) * 9 / 16); }
-    .card.half { height: calc((100vw - 16px) * 9 / 32); }
+    /* Bombas-specific card heights — same height for full and half, 10% under 16:9 */
+    .card.full,
+    .card.half { height: calc((100vw - 16px) * 9 / 16 * 0.9); }
 
     /* ═══════════════════════════════════════════
        PROJECT GRID
