@@ -65,7 +65,7 @@
       transition: background-color 0.3s ease;
     }
 
-    /* Left column: title + agency + awards */
+    /* Left column: title + agency */
     .intro-left {
       flex: 0 0 auto;
       width: 340px;
@@ -87,23 +87,65 @@
     .intro-credit {
       font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
       font-size: var(--pill-size);
-      font-weight: 700;
-      color: #1e1e1e;
-    }
-
-    .intro-awards {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 16px;
-    }
-
-    .intro-awards span {
-      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      font-size: var(--pill-size);
       font-weight: 400;
       color: #1e1e1e;
     }
+
+    /* ── Awards card ── */
+    .awards-card {
+      background: #ebebeb;
+      border-radius: var(--r-card);
+      padding: 28px 56px 36px;
+      margin-bottom: var(--gap);
+      transition: background-color 0.3s ease;
+    }
+
+    .awards-label {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      color: #939393;
+      margin-bottom: 20px;
+    }
+
+    .awards-row {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .award-item {
+      flex: 1;
+      padding-right: 40px;
+    }
+
+    .award-item + .award-item {
+      padding-left: 40px;
+      padding-right: 40px;
+      border-left: 1px solid #c8c8c8;
+    }
+
+    .award-item:last-child {
+      padding-right: 0;
+    }
+
+    .award-name {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--pill-size);
+      font-weight: 600;
+      color: var(--bio-text);
+      margin-bottom: 4px;
+    }
+
+    .award-category {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      color: var(--bio-text);
+    }
+
+    body.dark-mode .awards-card { background: #1f1f1f; }
+    body.dark-mode .award-item + .award-item { border-left-color: #333333; }
 
     .intro-right {
       flex: 1;
@@ -300,13 +342,8 @@
 
   <div class="intro-card">
     <div class="intro-left">
-      <div class="intro-credit">Gut Agency</div>
       <div class="intro-title">Artois Probability</div>
-      <div class="intro-awards">
-        <span>Grand Prix — Creative Data</span>
-        <span>2× Gold — Outdoor &amp; Print</span>
-        <span>2× Silver — Brand Experience &amp; Activation, Creative Data</span>
-      </div>
+      <div class="intro-credit">Gut Agency</div>
     </div>
 
     <div class="intro-right">
@@ -405,6 +442,24 @@
 
   </main>
 
+
+  <div class="awards-card">
+    <div class="awards-label">Awards</div>
+    <div class="awards-row">
+      <div class="award-item">
+        <div class="award-name">Grand Prix</div>
+        <div class="award-category">Creative Data</div>
+      </div>
+      <div class="award-item">
+        <div class="award-name">2× Gold</div>
+        <div class="award-category">Outdoor &amp; Print</div>
+      </div>
+      <div class="award-item">
+        <div class="award-name">2× Silver</div>
+        <div class="award-category">Brand Experience &amp; Activation, Creative Data</div>
+      </div>
+    </div>
+  </div>
 
   <footer class="page-footer">
     <a href="learning.html" class="footer-pill">Previous</a>
