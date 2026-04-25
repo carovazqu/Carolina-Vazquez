@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sudor — Carolina Vázquez</title>
+  <style>
+
+    @font-face {
+      font-family: 'SF Pro Display';
+      src: local('SF Pro Display Regular'), local('SFProDisplay-Regular'), local('.SFNSDisplay');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'SF Pro Condensed';
+      src: local('SF Pro Display Condensed Black'), local('SFProDisplay-CondensedBlack'), local('.SFNSDisplayCondensed-Black');
+      font-weight: 900;
+      font-stretch: condensed;
+    }
+    @font-face {
+      font-family: 'SF Pro Text';
+      src: local('SF Pro Text Regular'), local('SFProText-Regular'), local('.SFNSText');
+      font-weight: 400;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #ffffff;
+      --card:      #1e1e1e;
+      --dark:      #1e1e1e;
+      --pill-bg:   #f4f4f4;
+      --pill-text: #1e1e1e;
+      --bio-text:  #1e1e1e;
+      --font:      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+
+      --pill-size: 14px;
+      --heading:   60px;
+      --body-size: 22px;
+      --body-lead: 26px;
+
+      --r-card: 12px;
+      --r-pill: 8px;
+      --gap:    8px;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--dark);
+      font-family: var(--font);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body { padding: 8px; }
+
+    /* ── Intro card ── */
+    .intro-card {
+      background: #ebebeb;
+      border-radius: var(--r-card);
+      padding: 52px 56px;
+      display: flex;
+      align-items: flex-start;
+      gap: 80px;
+      margin-bottom: var(--gap);
+      transition: background-color 0.3s ease;
+    }
+
+    .intro-left {
+      flex: 0 0 auto;
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .intro-title {
+      font-family: 'SF Pro Condensed', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--heading);
+      font-weight: 900;
+      font-stretch: condensed;
+      color: var(--bio-text);
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+    }
+
+    .intro-credit {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      color: #939393;
+    }
+
+    .intro-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      padding-top: 6px;
+    }
+
+    .intro-desc {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--body-size);
+      line-height: var(--body-lead);
+      font-weight: 400;
+      color: var(--bio-text);
+    }
+
+    .intro-extra {
+      font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      font-size: var(--body-size);
+      line-height: var(--body-lead);
+      font-weight: 400;
+      color: var(--bio-text);
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.55s cubic-bezier(0.65, 0, 0.35, 1),
+                  opacity    0.55s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+    .intro-extra.open {
+      max-height: 800px;
+      opacity: 1;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: var(--gap);
+      align-items: center;
+    }
+
+    .read-more-btn {
+      background: #ffffff;
+      color: var(--pill-text);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      font-family: var(--font);
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+    .read-more-btn:hover                { background: #d9d9d9; }
+    body.dark-mode .read-more-btn       { background: #000000; color: #e8e8e8; }
+    body.dark-mode .read-more-btn:hover { background: #1a1a1a; }
+
+    /* Card heights — 10% under 16:9 */
+    .card.full,
+    .card.half { height: calc((100vw - 16px) * 9 / 16 * 0.9) !important; }
+
+    /* ── Grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: var(--gap);
+      margin-bottom: 0;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--r-card);
+      cursor: default;
+      position: relative;
+      height: 630px;
+      overflow: hidden;
+    }
+
+    .card.full   { grid-column: 1 / -1; }
+    .card.wide   { grid-column: span 4; }
+    .card.narrow { grid-column: span 2; }
+    .card.half   { grid-column: span 3; }
+
+    .card-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      border-radius: var(--r-card);
+      z-index: 0;
+    }
+
+    .card-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: var(--r-card);
+      z-index: 0;
+    }
+
+    /* ── Bottom bar ── */
+    .bottom-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: var(--gap);
+      z-index: 50;
+      align-items: center;
+    }
+
+    .pill {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      font-family: var(--font);
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+    .pill:hover { background: #e8e8e8; }
+
+    /* ── Footer ── */
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+      margin-bottom: 16px;
+    }
+
+    .footer-pill {
+      background: var(--pill-bg);
+      color: #939393;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      font-family: var(--font);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+    .footer-pill:hover { background: #e8e8e8; }
+
+    /* ── Dark mode ── */
+    body.dark-mode {
+      --bg:        #000000;
+      --pill-bg:   #1a1a1a;
+      --pill-text: #e8e8e8;
+      --bio-text:  #e8e8e8;
+      --dark:      #e8e8e8;
+    }
+    body.dark-mode .pill:hover        { background: #2a2a2a; }
+    body.dark-mode .footer-pill:hover { background: #2a2a2a; }
+    body.dark-mode .intro-card        { background: #1f1f1f; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      body { padding: 6px 6px 90px; }
+      :root { --heading: 28px; --body-size: 17px; --body-lead: 24px; }
+      .intro-card  { flex-direction: column; gap: 24px; padding: 32px 24px; }
+      .intro-left  { width: auto; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="intro-card">
+    <div class="intro-left">
+      <div class="intro-title">Sudor</div>
+      <div class="intro-credit">Freelance</div>
+    </div>
+
+    <div class="intro-right">
+      <p class="intro-desc">
+        When we talk about Latin music, there is a common imaginary in most people.
+        But music, like any cultural event, is dynamic. It transforms according to the
+        context and takes different forms. So every now and then, it's worth looking at
+        what's happening and redefining our identity.
+        Sudor is an emerging Latin music festival that seeks to bring new sounds, new
+        artists and new proposals to the stage. It aims to be an integral experience
+        for the audience. So that when we talk about Latin music, more people feel
+        represented.
+      </p>
+
+      <div class="intro-extra" id="intro-extra">
+        <p>
+          It is a festival to move, dance, warm up, enjoy and sweat. That's why the
+          graphic decisions revolve around this. From a color palette that refers to
+          summer, to illustrations of dancing bodies in the open air and fluid shapes
+          that transmit movement. All these elements and decisions seek to portray and
+          transmit the essence of the event.
+        </p>
+      </div>
+
+      <div class="btn-row">
+        <button class="read-more-btn" id="read-more-btn" onclick="toggleReadMore()">Read More</button>
+        <a class="read-more-btn" href="https://www.behance.net/gallery/134110583/SUDOR-Festival" target="_blank" rel="noopener">Be Featured</a>
+        <a class="read-more-btn" href="graphicfest2.html">Graphic Fest 2</a>
+      </div>
+    </div>
+  </div>
+
+
+  <main class="grid">
+
+    <!-- 01 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_01.png');"></div>
+    </div>
+
+    <!-- 02 + 03 — Half images -->
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_02.png');"></div>
+    </div>
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_03.png');"></div>
+    </div>
+
+    <!-- 04 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_04.png');"></div>
+    </div>
+
+    <!-- 05 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_05.png');"></div>
+    </div>
+
+    <!-- 06 + 07 — Half images -->
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_06.png');"></div>
+    </div>
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_07.png');"></div>
+    </div>
+
+    <!-- 08 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_08.png');"></div>
+    </div>
+
+    <!-- 09 + 10 — Half images -->
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_09.png');"></div>
+    </div>
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_10.png');"></div>
+    </div>
+
+    <!-- 11 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_11.png');"></div>
+    </div>
+
+    <!-- 12 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_12.png');"></div>
+    </div>
+
+    <!-- 13 + 14 — Half images -->
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_13.png');"></div>
+    </div>
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_14.png');"></div>
+    </div>
+
+    <!-- 15 — Full image -->
+    <div class="card full">
+      <div class="card-bg" style="background-image: url('images/Sudor_15.png');"></div>
+    </div>
+
+    <!-- 16 + 17 — Half images -->
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_16.png');"></div>
+    </div>
+    <div class="card half">
+      <div class="card-bg" style="background-image: url('images/Sudor_17.png');"></div>
+    </div>
+
+  </main>
+
+
+  <footer class="page-footer">
+    <a href="artois.html"     class="footer-pill">Previous</a>
+    <a href="laindustria.html" class="footer-pill">Next</a>
+  </footer>
+
+
+  <div class="bottom-bar">
+    <a href="index.html" class="pill">Back to Home</a>
+    <button class="pill" onclick="sendEmail()">Let's talk!</button>
+    <button class="pill" id="theme-btn" onclick="toggleTheme()" style="padding: 8px 10px; line-height:0;">
+      <svg id="theme-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg id="theme-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+
+
+  <script>
+
+    const extra       = document.getElementById('intro-extra');
+    const readMoreBtn = document.getElementById('read-more-btn');
+    let   moreOpen    = false;
+
+    function toggleReadMore() {
+      moreOpen = !moreOpen;
+      extra.classList.toggle('open', moreOpen);
+      readMoreBtn.textContent = moreOpen ? 'Read Less' : 'Read More';
+    }
+
+    let isDark = false;
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.classList.toggle('dark-mode', isDark);
+      document.getElementById('theme-sun').style.display  = isDark ? 'none'  : 'block';
+      document.getElementById('theme-moon').style.display = isDark ? 'block' : 'none';
+    }
+
+    function sendEmail() {
+      window.location.href = 'mailto:carovazqu13@gmail.com';
+    }
+
+  </script>
+</body>
+</html>
