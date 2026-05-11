@@ -152,7 +152,7 @@
 
     /* Card heights — 10% under 16:9 */
     .card.full,
-    .card.half { height: calc((100vw - 16px) * 9 / 16 * 0.9) !important; }
+    .card.half { height: min(calc((100vw - 16px) * 9 / 16 * 0.9), calc(100vh - 120px)) !important; }
 
     /* ── Grid ── */
     .grid {
