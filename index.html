@@ -40,11 +40,11 @@
       --bio-text:  #1e1e1e;
       --font:      'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
 
-      --pill-size: 14px;
-      /* Text scales only when panel starts shrinking (viewport < 1030px) */
-      --heading:   clamp(28px, calc(7.7vw - 19px), 60px);
-      --body-size: clamp(16px, calc(2.8vw - 7px),  22px);
-      --body-lead: clamp(22px, calc(3.3vw - 8px),  26px);
+      /* All sizes = previous × 0.85 */
+      --pill-size: 14px;   /* was 17px — shared by all pills */
+      --heading:   60px;   /* was 58px */
+      --body-size: 22px;   /* was 30px */
+      --body-lead: 26px;   /* was 35px */
 
       --r-card: 12px;
       --r-pill: 8px;       /* rounded rectangle, not full pill */
@@ -395,6 +395,7 @@
     ═══════════════════════════════════════════ */
     @media (max-width: 768px) {
       body { padding: 6px 6px 90px; }
+      :root { --heading: 28px; --body-size: 17px; --body-lead: 24px; }
       #bio-content { padding: 32px 24px; justify-content: flex-start; }
     }
 
@@ -510,9 +511,8 @@
   <script>
 
     // ── State ─────────────────────────────────────────────
-    let isOpen    = false;
-    let isClosing = false;
-    let pillRect  = null;
+    let isOpen   = false;
+    let pillRect = null;
 
     const EASE      = 'cubic-bezier(0.65, 0, 0.35, 1)';
     const EASE_OPEN = 'cubic-bezier(0.34, 1.2, 0.64, 1)'; // spring for open
@@ -561,7 +561,7 @@
     }
 
     window.addEventListener('resize', () => {
-      if (!isOpen && !isClosing) {
+      if (!isOpen) {
         snapToGhost();
       } else {
         // Keep panel correctly sized and centred as window resizes
@@ -583,12 +583,6 @@
     function openBio() {
       if (isOpen) return;
       isOpen = true;
-
-      // Reset ghost to natural state before measuring —
-      // in case a previous close animation is still mid-flight
-      ghost.classList.remove('morphing');
-      ghost.style.width = '';
-      ghost.getBoundingClientRect(); // force reflow
 
       pillRect = ghost.getBoundingClientRect();
 
@@ -649,11 +643,7 @@
     // ── Close ──────────────────────────────────────────────
     function closeBio() {
       if (!isOpen) return;
-      isOpen    = false;
-      isClosing = true;
-
-      // Remove theme-transitioning immediately — its !important would block the morph animation
-      panel.classList.remove('theme-transitioning');
+      isOpen = false;
 
       panel.style.pointerEvents = 'none';
       bioContent.classList.remove('visible');
@@ -663,7 +653,7 @@
 
       setTimeout(() => {
 
-        // Morph: full panel → pill
+        // Morph: full panel → pill, dark → light
         panel.style.transition = [
           `left ${DUR} ${EASE}`,
           `top ${DUR} ${EASE}`,
@@ -684,20 +674,15 @@
           pillText.style.transform = 'scale(1)';
         }, 495);
 
-      }, 150);
-
-      // Final cleanup — runs after ghost fully expands (200ms delay + 650ms transition)
-      // Snaps panel exactly onto ghost, restores all state cleanly
-      setTimeout(() => {
-        if (!isOpen) {
-          isClosing = false;
-          ghost.style.width = '';
-          snapToGhost();
-          pillText.style.transform  = 'scale(1)';
+        // Shrink done: restore interactivity + reset ghost max-width
+        setTimeout(() => {
+          panel.style.transition    = 'none';
           panel.style.pointerEvents = 'all';
           panel.style.cursor        = 'pointer';
-        }
-      }, 900);
+          ghost.style.width         = '';
+        }, 570);
+
+      }, 150);
     }
 
     // ── About me pill hover ───────────────────────────────
