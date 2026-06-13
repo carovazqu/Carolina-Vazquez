@@ -178,7 +178,7 @@
 
     .card-bg {
       position: absolute;
-      inset: 0;
+      inset: 0 -1px;
       background-size: cover;
       background-position: center;
       border-radius: var(--r-card);
@@ -187,8 +187,8 @@
 
     .card-video {
       position: absolute;
-      inset: 0;
-      width: 100%;
+      inset: 0 -1px;
+      width: calc(100% + 2px);
       height: 100%;
       object-fit: cover;
       border-radius: var(--r-card);
