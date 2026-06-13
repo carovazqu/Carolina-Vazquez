@@ -144,7 +144,7 @@
 
     /* Card heights — same for full and half, 10% under 16:9 */
     .card.full,
-    .card.half { height: min(calc((100vw - 16px) * 9 / 16 * 0.9), 98vh) !important; }
+    .card.half { height: calc((100vw - 16px) * 9 / 16 * 0.9) !important; }
 
     /* ── Grid ── */
     .grid {
@@ -152,9 +152,6 @@
       grid-template-columns: repeat(6, 1fr);
       gap: var(--gap);
       margin-bottom: 0;
-      max-width: 1440px;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     .card {
