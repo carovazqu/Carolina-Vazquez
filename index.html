@@ -478,16 +478,14 @@
     <div id="bio-content">
       <button class="bio-close" onclick="closeBio()">×</button>
       <div class="bio-heading">
-        Carolina Vázquez is a<br>
-        designer and art director<br>
-        working at &amp;Walsh
+        Carolina Vázquez is a Designer<br>
+        and Art Director at &amp;Walsh.
       </div>
       <div class="bio-body">
-        Argentinian Designer and Art Director working at &amp;walsh based in Amsterdam.
-        With a focus on developing visual identities and design systems and a background
-        in advertising, which has shaped my approach to creative and strategic thinking.
-        My work has been recognized at international festivals such as Cannes Lions.
-        Currently leading projects and design teams at &amp;walsh.
+        Argentinian Designer and Art Director based in Amsterdam, specializing in visual
+        identities and design systems. My background in advertising has shaped how I approach
+        every project, both creatively and strategically, with work recognized at Cannes Lions.
+        Currently leading projects and teams at &amp;Walsh.
       </div>
     </div>
   </div>
@@ -496,7 +494,7 @@
   <!-- ═══════════════════ PASSWORD OVERLAY ═══════════════════ -->
   <div class="pw-overlay" id="pw-overlay">
     <div class="dialog">
-      <h3>Special Project</h3>
+      <h3>Private Work</h3>
       <p>This project is password protected.</p>
       <input type="password" id="pw-input" placeholder="Enter password" />
       <span class="error-msg" id="pw-error">Incorrect password. Please try again.</span>
@@ -753,7 +751,7 @@
     }
     function checkPw() {
       const val = document.getElementById('pw-input').value.trim().toLowerCase();
-      if (val === 'cookies') { closePw(); }
+      if (val === 'sockcompany') { closePw(); }
       else { document.getElementById('pw-error').classList.add('show'); }
     }
 
