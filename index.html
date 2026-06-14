@@ -758,7 +758,11 @@
     }
     function checkPw() {
       const val = document.getElementById('pw-input').value.trim().toLowerCase();
-      if (val === 'sockcompany') { closePw(); }
+      if (val === 'sockcompany') {
+        sessionStorage.setItem('bombas_unlocked', '1');
+        closePw();
+        window.location.href = 'bombas.html';
+      }
       else { document.getElementById('pw-error').classList.add('show'); }
     }
 
