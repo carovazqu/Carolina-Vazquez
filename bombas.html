@@ -594,8 +594,8 @@
          and update the project names in the text
   ═══════════════════════════════════════════ -->
   <footer class="page-footer">
-    <a href="laindustria.html" class="footer-pill">Previous</a><!-- ← CHANGE href -->
-    <a href="spil.html"        class="footer-pill">Next</a>    <!-- ← CHANGE href -->
+    <a href="spil.html" class="footer-pill">Previous</a><!-- ← CHANGE href -->
+    <a href="artois.html" class="footer-pill">Next</a>
   </footer>
 
 
@@ -675,6 +675,27 @@
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('scroll-top-btn');
       if (btn) btn.classList.toggle('visible', window.scrollY > 200);
+    });
+
+
+    // Lazy load background images
+    const lazyBgs = document.querySelectorAll('.card-bg[style*="url("]');
+    const bgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          if (el.dataset.bg) {
+            el.style.backgroundImage = el.dataset.bg;
+            bgObserver.unobserve(el);
+          }
+        }
+      });
+    }, { rootMargin: '300px' });
+
+    lazyBgs.forEach(el => {
+      el.dataset.bg = el.style.backgroundImage;
+      el.style.backgroundImage = 'none';
+      bgObserver.observe(el);
     });
 
   </script>
