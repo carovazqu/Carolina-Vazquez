@@ -545,20 +545,21 @@
 
     // ── Snap panel to ghost position ───────────────────────
     function snapToGhost() {
-      const r  = ghost.getBoundingClientRect();
-      const vv = window.visualViewport;
-      // On iOS mobile, getBoundingClientRect().top shifts when address bar
-      // shows/hides. Use visualViewport to pin to a stable bottom position.
-      const top = (vv && window.innerWidth <= 768)
-        ? (vv.offsetTop + vv.height - r.height - 24)
-        : r.top;
+      const r = ghost.getBoundingClientRect();
       panel.style.transition      = 'none';
-      panel.style.left            = r.left   + 'px';
-      panel.style.top             = top      + 'px';
-      panel.style.width           = r.width  + 'px';
+      panel.style.left            = r.left  + 'px';
+      panel.style.width           = r.width + 'px';
       panel.style.height          = r.height + 'px';
       panel.style.borderRadius    = '10px';
       panel.style.backgroundColor = PILL_BG;
+      // On mobile use CSS bottom positioning — stable across iOS address bar show/hide
+      if (window.innerWidth <= 768) {
+        panel.style.top    = '';
+        panel.style.bottom = '24px';
+      } else {
+        panel.style.bottom = '';
+        panel.style.top    = r.top + 'px';
+      }
     }
 
     // ── Init after fonts load ──────────────────────────────
@@ -582,13 +583,6 @@
         top:    mobile ? 0 : null,
         radius: mobile ? '0' : '20px'
       };
-    }
-
-    // Re-snap on iOS scroll (address bar show/hide changes viewport)
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', () => {
-        if (!isOpen && !isClosing) snapToGhost();
-      });
     }
 
     window.addEventListener('resize', () => {
@@ -630,8 +624,9 @@
       panel.style.pointerEvents = 'none';
       panel.style.cursor        = 'default';
 
-      // Snap to ghost (ensure alignment)
+      // Snap to ghost (ensure alignment); convert mobile bottom→top for animation
       panel.style.transition      = 'none';
+      panel.style.bottom          = '';
       panel.style.left            = pillRect.left   + 'px';
       panel.style.top             = pillRect.top    + 'px';
       panel.style.width           = pillRect.width  + 'px';
