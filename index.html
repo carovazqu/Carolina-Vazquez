@@ -545,10 +545,16 @@
 
     // ── Snap panel to ghost position ───────────────────────
     function snapToGhost() {
-      const r = ghost.getBoundingClientRect();
+      const r  = ghost.getBoundingClientRect();
+      const vv = window.visualViewport;
+      // On iOS mobile, getBoundingClientRect().top shifts when address bar
+      // shows/hides. Use visualViewport to pin to a stable bottom position.
+      const top = (vv && window.innerWidth <= 768)
+        ? (vv.offsetTop + vv.height - r.height - 24)
+        : r.top;
       panel.style.transition      = 'none';
       panel.style.left            = r.left   + 'px';
-      panel.style.top             = r.top    + 'px';
+      panel.style.top             = top      + 'px';
       panel.style.width           = r.width  + 'px';
       panel.style.height          = r.height + 'px';
       panel.style.borderRadius    = '10px';
