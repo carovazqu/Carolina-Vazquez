@@ -33,7 +33,7 @@
 
     :root {
       --bg:        #ffffff;
-      --card:      #1e1e1e;
+      --card:      var(--bg);
       --dark:      #1e1e1e;
       --pill-bg:   #f4f4f4;
       --pill-text: #1e1e1e;
@@ -375,6 +375,7 @@
     ═══════════════════════════════════════════ */
     body.dark-mode {
       --bg:        #000000;
+      --card:      #000000;
       --pill-bg:   #1a1a1a;
       --pill-text: #e8e8e8;
       --bio-text:  #e8e8e8;
@@ -417,7 +418,7 @@
       <span class="card-label">Elppa</span>
     </div>
     <div class="card narrow" data-project="Learning by helping" data-page="learning.html" style="cursor:pointer;">
-      <video class="card-video" autoplay loop muted playsinline>
+      <video class="card-video" autoplay loop muted playsinline style="inset: 0 -1px; width: calc(100% + 2px);">
         <source src="images/learning.mp4" type="video/mp4">
       </video>
       <span class="card-label">Learning by helping</span>
