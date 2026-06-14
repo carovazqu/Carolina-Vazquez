@@ -298,6 +298,86 @@
     }
 
 
+    /* ── Password gate ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gate-dialog {
+      background: #ebebeb;
+      border-radius: var(--r-card);
+      padding: 40px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 340px;
+    }
+    body.dark-mode .gate-dialog { background: #1f1f1f; }
+    .gate-dialog h3 {
+      font-family: 'SF Pro Condensed', -apple-system, sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      font-stretch: condensed;
+      color: var(--bio-text);
+    }
+    .gate-dialog p {
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: var(--pill-size);
+      color: var(--bio-text);
+    }
+    .gate-dialog input {
+      background: var(--bg);
+      border: 1px solid #d0d0d0;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-family: var(--font);
+      color: var(--dark);
+      outline: none;
+      width: 100%;
+    }
+    body.dark-mode .gate-dialog input { border-color: #333; }
+    .gate-error {
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: var(--pill-size);
+      color: #e05a5a;
+      display: none;
+    }
+    .gate-btns {
+      display: flex;
+      gap: var(--gap);
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--bio-text);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-family: var(--font);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn-dark {
+      background: var(--dark);
+      color: var(--bg);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 8px 15px;
+      font-size: var(--pill-size);
+      font-family: var(--font);
+      cursor: pointer;
+    }
+
     /* ── Scroll-to-top button ── */
     #scroll-top-btn {
       max-width: 0;
@@ -319,6 +399,20 @@
   </style>
 </head>
 <body>
+
+  <!-- Password gate -->
+  <div id="gate">
+    <div class="gate-dialog">
+      <h3>Private Work</h3>
+      <p>This project is password protected.</p>
+      <input type="password" id="gate-input" placeholder="Enter password" />
+      <span class="gate-error" id="gate-error">Incorrect password. Please try again.</span>
+      <div class="gate-btns">
+        <a href="index.html" class="btn-ghost">Cancel</a>
+        <button class="btn-dark" onclick="checkGate()">Enter</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════════
        INTRO CARD
@@ -524,6 +618,25 @@
 
 
   <script>
+
+    // ── Password gate ─────────────────────────────────────
+    if (sessionStorage.getItem('bombas_unlocked') === '1') {
+      document.getElementById('gate').style.display = 'none';
+    }
+
+    function checkGate() {
+      const val = document.getElementById('gate-input').value.trim().toLowerCase();
+      if (val === 'sockcompany') {
+        sessionStorage.setItem('bombas_unlocked', '1');
+        document.getElementById('gate').style.display = 'none';
+      } else {
+        document.getElementById('gate-error').style.display = 'block';
+      }
+    }
+
+    document.getElementById('gate-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') checkGate();
+    });
 
     // ── Read More toggle ───────────────────────────────────
     const extra       = document.getElementById('intro-extra');
