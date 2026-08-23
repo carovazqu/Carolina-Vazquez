@@ -414,10 +414,13 @@
       --bg:      #000000;
       --card:    #111111;
       --text:    #e8e8e8;
-      --muted:   #555555;
+      --muted:   #707070;
       --divider: #2a2a2a;
       --pill-bg: #1a1a1a;
     }
+
+    /* Fix: html is the parent of body so it doesn't inherit body.dark-mode variables */
+    html:has(body.dark-mode) { background: #000000; }
     body.dark-mode .pill:hover  { background: #2a2a2a; }
     body.dark-mode .skill-tag   { background: #1f1f1f; }
 
