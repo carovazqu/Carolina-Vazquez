@@ -406,18 +406,7 @@
 
     .credit-item {
       padding: 16px 24px 16px 0;
-      border-right: 1px solid #c8c8c8;
-    }
-
-    .credit-item:nth-child(5n) {
-      border-right: none;
-      padding-right: 0;
-    }
-
-    .credit-item:nth-child(n+6) {
       border-top: 1px solid #c8c8c8;
-      padding-top: 20px;
-      margin-top: 4px;
     }
 
     .credit-role {
@@ -437,15 +426,13 @@
     }
 
     body.dark-mode .credits-card { background: #1f1f1f; }
-    body.dark-mode .credit-item { border-right-color: #333; }
-    body.dark-mode .credit-item:nth-child(n+6) { border-top-color: #333; }
+    body.dark-mode .credit-item { border-top-color: #333; }
 
     @media (max-width: 768px) {
       .credits-card { padding: 20px 24px; }
       .credits-row { grid-template-columns: 1fr; }
-      .credit-item { padding: 12px 0; border-right: none !important; border-top: 1px solid #c8c8c8; margin-top: 0; }
+      .credit-item { padding: 12px 0; }
       .credit-item:first-child { border-top: none; padding-top: 0; }
-      .credit-item:nth-child(n+6) { border-top: 1px solid #c8c8c8; padding-top: 12px; margin-top: 0; }
     }
 
     /* ── In-grid text block ── */
