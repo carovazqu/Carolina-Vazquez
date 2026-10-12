@@ -401,12 +401,13 @@
     .credits-row {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 0;
+      column-gap: 32px;
+      row-gap: 0;
     }
 
     .credit-item {
-      padding: 16px 24px 16px 0;
-      border-top: 1px dashed #c8c8c8;
+      padding: 16px 0 16px 0;
+      border-top: 1px solid #c8c8c8;
     }
 
     .credit-role {
@@ -426,7 +427,7 @@
     }
 
     body.dark-mode .credits-card { background: #1f1f1f; }
-    body.dark-mode .credit-item { border-top: 1px dashed #333; }
+    body.dark-mode .credit-item { border-top: 1px solid #333; }
 
     @media (max-width: 768px) {
       .credits-card { padding: 20px 24px; }
@@ -501,10 +502,7 @@
         </p>
       </div><!-- ← CHANGE: extra description text (hidden until Read More clicked) -->
 
-      <div style="display:flex; gap:8px; flex-wrap:wrap;">
-        <button class="read-more-btn" id="read-more-btn" onclick="toggleReadMore()">Read More</button>
-        <a href="https://mindsparklemag.com/designs/soft-shapes-and-rounded-type-turn-bombas-into-a-comfort-brand" class="read-more-btn" target="_blank" rel="noopener">Mindsparkle Mag</a>
-      </div>
+      <button class="read-more-btn" id="read-more-btn" onclick="toggleReadMore()">Read More</button>
     </div>
 
   </div>
