@@ -141,9 +141,11 @@
     body.dark-mode .read-more-btn     { background: #000000; color: #e8e8e8; }
     body.dark-mode .read-more-btn:hover { background: #1a1a1a; }
 
-    /* Bombas-specific card heights — same height for full and half, 10% under 16:9 */
-    .card.full,
-    .card.half { height: calc((100vw - 16px) * 9 / 16 * 0.9) !important; }
+    /* Full cards: 16:9 */
+    .card.full { height: auto; aspect-ratio: 16 / 9; }
+
+    /* Half cards: match 1890×2181 portrait ratio */
+    .card.half { height: auto; aspect-ratio: 1890 / 2181; }
 
     /* ═══════════════════════════════════════════
        PROJECT GRID
@@ -463,7 +465,7 @@
 
     <!-- 01 — Full video · sound on · press play -->
     <div class="card full">
-      <video preload="none" class="card-video" controls playsinline>
+      <video preload="none" class="card-video" controls playsinline poster="images/01.png">
         <source src="images/01.mp4" type="video/mp4">
       </video>
     </div>
@@ -621,7 +623,7 @@
 
     <!-- 31 — Full video · sound on · press play -->
     <div class="card full">
-      <video preload="none" class="card-video" controls playsinline>
+      <video preload="none" class="card-video" controls playsinline poster="images/31.png">
         <source src="images/31.mp4" type="video/mp4">
       </video>
     </div>
