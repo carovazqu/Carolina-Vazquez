@@ -382,6 +382,65 @@
       cursor: pointer;
     }
 
+    /* ── Credits card ── */
+    .credits-card {
+      background: #ebebeb;
+      border-radius: var(--r-card);
+      padding: 28px 56px;
+      margin-top: var(--gap);
+      transition: background-color 0.3s ease;
+    }
+
+    .credits-label {
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: var(--pill-size);
+      color: #939393;
+      margin-bottom: 20px;
+    }
+
+    .credits-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+    }
+
+    .credit-item {
+      flex: 0 0 auto;
+      padding: 12px 40px 12px 0;
+      min-width: 200px;
+    }
+
+    .credit-item + .credit-item {
+      padding-left: 40px;
+      border-left: 1px solid #c8c8c8;
+    }
+
+    .credit-role {
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: var(--pill-size);
+      font-weight: 600;
+      color: var(--bio-text);
+      margin-bottom: 4px;
+    }
+
+    .credit-names {
+      font-family: 'SF Pro Text', -apple-system, sans-serif;
+      font-size: var(--pill-size);
+      font-weight: 400;
+      color: var(--bio-text);
+      line-height: 1.5;
+    }
+
+    body.dark-mode .credits-card { background: #1f1f1f; }
+    body.dark-mode .credit-item + .credit-item { border-left-color: #333; }
+
+    @media (max-width: 768px) {
+      .credits-card { padding: 20px 24px; }
+      .credits-row { flex-direction: column; gap: 0; }
+      .credit-item { padding: 12px 0; border-left: none !important; border-top: 1px solid #c8c8c8; }
+      .credit-item:first-child { border-top: none; padding-top: 0; }
+    }
+
     /* ── In-grid text block ── */
     .text-block {
       grid-column: 1 / -1;
@@ -667,6 +726,53 @@
 
   </main>
 
+
+  <!-- Credits -->
+  <div class="credits-card">
+    <div class="credits-label">Credits</div>
+    <div class="credits-row">
+      <div class="credit-item">
+        <div class="credit-role">Client</div>
+        <div class="credit-names">Bombas</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Agency</div>
+        <div class="credit-names">&amp;Walsh</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Creative Direction</div>
+        <div class="credit-names">Jessica Walsh</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Brand Strategy &amp; Copywriting</div>
+        <div class="credit-names">Lauren Walsh, Jessica Walsh, Astha Avinash</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Associate Creative Director</div>
+        <div class="credit-names">Lucas Luz</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Art Director</div>
+        <div class="credit-names">Caro Vazquez</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Production</div>
+        <div class="credit-names">Billy Allen, Chloe Cross, Chanel Harper,<br>Chelsea Frimpong, Jack Trego, Ariana Sanchez</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Design</div>
+        <div class="credit-names">Juanse Carvajal, Leandra Rexhepi, Julio Zukerman</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Illustration</div>
+        <div class="credit-names">Julio Zukerman</div>
+      </div>
+      <div class="credit-item">
+        <div class="credit-role">Video &amp; Animations</div>
+        <div class="credit-names">Pedro Magalhães, Igor Fajardo</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════════
        FOOTER — Previous / Next
