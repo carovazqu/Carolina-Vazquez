@@ -863,6 +863,12 @@
       bgObserver.observe(el);
     });
 
+    document.querySelectorAll('.card-video[controls]').forEach(video => {
+      video.addEventListener('click', () => {
+        video.paused ? video.play() : video.pause();
+      });
+    });
+
   </script>
 </body>
 </html>
