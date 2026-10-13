@@ -448,6 +448,19 @@
       max-width: 640px;
     }
 
+    /* ── Clickable video overlay ── */
+    .clickable-video { cursor: pointer; }
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .clickable-video.playing .play-overlay { opacity: 0; }
+
     /* ── Scroll-to-top button ── */
     #scroll-top-btn {
       max-width: 0;
@@ -521,10 +534,13 @@
     </div>
 
     <!-- 01 — Full video · sound on · press play -->
-    <div class="card full">
-      <video preload="none" class="card-video" controls playsinline poster="images/01.png">
+    <div class="card full clickable-video">
+      <video preload="none" class="card-video" playsinline poster="images/01.png">
         <source src="images/01.mp4" type="video/mp4">
       </video>
+      <div class="play-overlay">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.4)"/><polygon points="19,14 37,24 19,34" fill="white"/></svg>
+      </div>
     </div>
 
     <!-- 02 — Full static -->
@@ -679,10 +695,13 @@
     </div>
 
     <!-- 31 — Full video · sound on · press play -->
-    <div class="card full">
-      <video preload="none" class="card-video" controls playsinline poster="images/31.png">
+    <div class="card full clickable-video">
+      <video preload="none" class="card-video" playsinline poster="images/31.png">
         <source src="images/31.mp4" type="video/mp4">
       </video>
+      <div class="play-overlay">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.4)"/><polygon points="19,14 37,24 19,34" fill="white"/></svg>
+      </div>
     </div>
 
     <!-- 32 — Full static -->
@@ -863,10 +882,18 @@
       bgObserver.observe(el);
     });
 
-    document.querySelectorAll('.card-video[controls]').forEach(video => {
-      video.addEventListener('click', () => {
-        video.paused ? video.play() : video.pause();
+    document.querySelectorAll('.clickable-video').forEach(card => {
+      const video = card.querySelector('video');
+      card.addEventListener('click', () => {
+        if (video.paused) {
+          video.play();
+          card.classList.add('playing');
+        } else {
+          video.pause();
+          card.classList.remove('playing');
+        }
       });
+      video.addEventListener('ended', () => card.classList.remove('playing'));
     });
 
   </script>
